@@ -3,23 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Future Me AI</title>
-
 <style>
 *{
   margin:0;
   padding:0;
   box-sizing:border-box;
 }
-
 body{
   font-family:Arial,sans-serif;
   min-height:100vh;
   background:linear-gradient(135deg,#e3f2fd,#fce4ec);
   padding:30px;
 }
-
 .container{
   max-width:1000px;
   margin:auto;
@@ -28,22 +24,18 @@ body{
   padding:30px;
   box-shadow:0 15px 35px rgba(0,0,0,.15);
 }
-
 h1{
   text-align:center;
   margin-bottom:10px;
 }
-
 .subtitle{
   text-align:center;
   color:#777;
   margin-bottom:25px;
 }
-
 .hidden{
   display:none;
 }
-
 input,
 textarea,
 select{
@@ -55,54 +47,45 @@ select{
   margin-bottom:14px;
   font-size:15px;
 }
-
 textarea{
   min-height:120px;
   resize:vertical;
 }
-
 button{
   border:none;
   padding:12px 18px;
   border-radius:12px;
   cursor:pointer;
   font-weight:bold;
+  transition: opacity 0.2s;
 }
-
 button:hover{
   opacity:.9;
 }
-
 .login-btn{
   background:#42a5f5;
   color:white;
 }
-
 .signup-btn{
   background:#7e57c2;
   color:white;
 }
-
 .logout-btn{
   background:#455a64;
   color:white;
 }
-
 .ask-btn{
   background:#42a5f5;
   color:white;
 }
-
 .tts-btn{
   background:#7e57c2;
   color:white;
 }
-
 .profile-btn{
   background:#66bb6a;
   color:white;
 }
-
 .topbar{
   display:flex;
   justify-content:space-between;
@@ -110,20 +93,21 @@ button:hover{
   margin-bottom:20px;
   gap:10px;
 }
-
 .card{
   background:#f8fafc;
   border-radius:16px;
   padding:18px;
   margin-bottom:20px;
 }
-
 .answer-box{
   min-height:180px;
   white-space:pre-wrap;
   line-height:1.7;
+  background: white;
+  padding: 15px;
+  border-radius: 12px;
+  border: 1px solid #eee;
 }
-
 .chat-item{
   background:white;
   border-radius:12px;
@@ -131,635 +115,386 @@ button:hover{
   margin-bottom:12px;
   border:1px solid #eee;
 }
-
 .status{
   margin-top:10px;
   color:#666;
+  font-size:14px;
 }
-
 .auth-box{
   max-width:450px;
   margin:auto;
 }
-
 .user-email{
   font-size:14px;
   color:#666;
 }
-
 audio{
   width:100%;
   margin-top:15px;
 }
+hr {
+  margin: 10px 0;
+  border: 0;
+  border-top: 1px solid #eee;
+}
 </style>
 </head>
-
 <body>
 
 <div class="container">
+  <h1>🌟 Future Me AI</h1>
+  <div class="subtitle">10년 후의 나와 대화하는 AI 서비스</div>
 
-<h1>🌟 Future Me AI</h1>
+  <div id="authSection">
+    <div class="auth-box">
+      <input id="emailInput" type="email" placeholder="이메일">
+      <input id="passwordInput" type="password" placeholder="비밀번호">
+      <button class="login-btn" id="loginBtn">로그인</button>
+      <br><br>
+      <button class="signup-btn" id="signupBtn">회원가입</button>
+    </div>
+  </div>
 
-<div class="subtitle">
-10년 후의 나와 대화하는 AI 서비스
+  <div id="mainSection" class="hidden">
+    <div class="topbar">
+      <div>
+        <div>로그인 계정</div>
+        <div class="user-email" id="userEmail"></div>
+      </div>
+      <button class="logout-btn" id="logoutBtn">로그아웃</button>
+    </div>
+
+    <div class="card">
+      <h3>내 정보</h3>
+      <input id="dreamInput" placeholder="나의 꿈 (예: AI 개발자)">
+      <textarea id="worryInput" placeholder="현재 고민을 입력하세요"></textarea>
+      <button class="profile-btn" id="saveProfileBtn">프로필 저장</button>
+    </div>
+
+    <div class="card">
+      <h3>미래의 나에게 질문하기</h3>
+      <textarea id="questionInput" placeholder="예: 나는 무얼 하고 있을까?"></textarea>
+      <button class="ask-btn" id="askBtn">질문하기</button>
+      <div class="status" id="statusBox"></div>
+    </div>
+
+    <div class="card">
+      <h3>미래의 나의 답변</h3>
+      <div class="answer-box" id="answerBox">아직 답변이 없습니다.</div>
+      <br>
+      <button class="tts-btn" id="ttsBtn">🔊 음성으로 듣기</button>
+      <audio id="audioPlayer" controls></audio>
+    </div>
+
+    <div class="card">
+      <h3>대화 기록</h3>
+      <div id="chatHistory">기록이 없습니다.</div>
+    </div>
+  </div>
 </div>
 
-<!-- 로그인 화면 -->
-
-<div id="authSection">
-
-<div class="auth-box">
-
-<input
-id="emailInput"
-type="email"
-placeholder="이메일">
-
-<input
-id="passwordInput"
-type="password"
-placeholder="비밀번호">
-
-<button
-class="login-btn"
-id="loginBtn">
-로그인
-</button>
-
-<br><br>
-
-<button
-class="signup-btn"
-id="signupBtn">
-회원가입
-</button>
-
-</div>
-
-</div>
-
-<!-- 메인 화면 -->
-
-<div id="mainSection" class="hidden">
-
-<div class="topbar">
-
-<div>
-<div>로그인 계정</div>
-<div
-class="user-email"
-id="userEmail">
-</div>
-</div>
-
-<button
-class="logout-btn"
-id="logoutBtn">
-로그아웃
-</button>
-
-</div>
-
-<!-- 프로필 -->
-
-<div class="card">
-
-<h3>내 정보</h3>
-
-<input
-id="dreamInput"
-placeholder="나의 꿈 (예: AI 개발자)">
-
-<textarea
-id="worryInput"
-placeholder="현재 고민을 입력하세요">
-</textarea>
-
-<button
-class="profile-btn"
-id="saveProfileBtn">
-프로필 저장
-</button>
-
-</div>
-
-<!-- 질문 -->
-
-<div class="card">
-
-<h3>미래의 나에게 질문하기</h3>
-
-<textarea
-id="questionInput"
-placeholder="예: 나는 무얼 하고있을?">
-</textarea>
-
-<button
-class="ask-btn"
-id="askBtn">
-질문하기
-</button>
-
-<div
-class="status"
-id="statusBox">
-</div>
-
-</div>
-
-<!-- 답변 -->
-
-<div class="card">
-
-<h3>미래의 나의 답변</h3>
-
-<div
-class="answer-box"
-id="answerBox">
-
-아직 답변이 없습니다.
-
-</div>
-
-<br>
-
-<button
-class="tts-btn"
-id="ttsBtn">
-🔊 음성으로 듣기
-</button>
-
-<audio
-id="audioPlayer"
-controls>
-</audio>
-
-</div>
-
-<!-- 기록 -->
-
-<div class="card">
-
-<h3>대화 기록</h3>
-
-<div id="chatHistory">
-
-기록이 없습니다.
-
-</div>
-
-</div>
-
-</div>
 <script type="module">
-
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
-import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  signOut,
-  onAuthStateChanged
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-import {
-  getDatabase,
-  ref,
-  set,
-  push,
-  onValue
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getDatabase, ref, set, push, onValue, get } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 /* =========================
    Firebase 설정
 ========================= */
-
 const firebaseConfig = {
-
   apiKey: "AIzaSyDO-v52Ehwphh5gW0WBzu9_DliMhOzy4Yo",
-
   authDomain: "kang-f4e85.firebaseapp.com",
-
-  databaseURL:
-  "https://kang-f4e85-default-rtdb.firebaseio.com",
-
+  databaseURL: "https://kang-f4e85-default-rtdb.firebaseio.com",
   projectId: "kang-f4e85",
-
-  storageBucket:
-  "kang-f4e85.firebasestorage.app",
-
-  messagingSenderId:
-  "107057126084",
-
-  appId:
-  "1:107057126084:web:30f7bcb3f25dd2aa4a0791"
-
+  storageBucket: "kang-f4e85.firebasestorage.app",
+  messagingSenderId: "107057126084",
+  appId: "1:107057126084:web:30f7bcb3f25dd2aa4a0791"
 };
 
 const app = initializeApp(firebaseConfig);
-
 const auth = getAuth(app);
-
 const db = getDatabase(app);
 
 /* =========================
-   Apps Script URL
+   통합 구글 앱스 스크립트 URL
 ========================= */
-
-const GPT_URL =
-"https://script.google.com/macros/s/AKfycbxTmD_aKFktnu5BcmOj0x84D15A5qOEkAbpoyJ7DEGzJR7UayIGwKLDL7nFhU3hbB_wVw/exec";
-
-const TTS_URL =
-"https://script.google.com/macros/s/AKfycbxzvCeCidpIBm3Ez_AbmzTRrvzCkPa_7x-irAazDPzljPmuqjjHZOqXxfyS1vNh7tX1/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbzrLzqmesBKAu32QpAVwav-oadvAIYLjY2oP72KPCP2lHPkDQwEkP46M-Fdk1g_OfecvA/exec";
 
 /* =========================
    요소 가져오기
 ========================= */
-
-const authSection =
-document.getElementById("authSection");
-
-const mainSection =
-document.getElementById("mainSection");
-
-const emailInput =
-document.getElementById("emailInput");
-
-const passwordInput =
-document.getElementById("passwordInput");
-
-const loginBtn =
-document.getElementById("loginBtn");
-
-const signupBtn =
-document.getElementById("signupBtn");
-
-const logoutBtn =
-document.getElementById("logoutBtn");
-
-const userEmail =
-document.getElementById("userEmail");
-
-const dreamInput =
-document.getElementById("dreamInput");
-
-const worryInput =
-document.getElementById("worryInput");
-
-const saveProfileBtn =
-document.getElementById("saveProfileBtn");
-
-const askBtn =
-document.getElementById("askBtn");
-
-const questionInput =
-document.getElementById("questionInput");
-
-const answerBox =
-document.getElementById("answerBox");
-
-const statusBox =
-document.getElementById("statusBox");
-
-const chatHistory =
-document.getElementById("chatHistory");
-
-const ttsBtn =
-document.getElementById("ttsBtn");
-
-const audioPlayer =
-document.getElementById("audioPlayer");
-
-/* =========================
-   현재 로그인 사용자
-========================= */
+const authSection = document.getElementById("authSection");
+const mainSection = document.getElementById("mainSection");
+const emailInput = document.getElementById("emailInput");
+const passwordInput = document.getElementById("passwordInput");
+const loginBtn = document.getElementById("loginBtn");
+const signupBtn = document.getElementById("signupBtn");
+const logoutBtn = document.getElementById("logoutBtn");
+const userEmail = document.getElementById("userEmail");
+const dreamInput = document.getElementById("dreamInput");
+const worryInput = document.getElementById("worryInput");
+const saveProfileBtn = document.getElementById("saveProfileBtn");
+const askBtn = document.getElementById("askBtn");
+const questionInput = document.getElementById("questionInput");
+const answerBox = document.getElementById("answerBox");
+const statusBox = document.getElementById("statusBox");
+const chatHistory = document.getElementById("chatHistory");
+const ttsBtn = document.getElementById("ttsBtn");
+const audioPlayer = document.getElementById("audioPlayer");
 
 let currentUser = null;
 
 /* =========================
    회원가입
 ========================= */
-
-signupBtn.addEventListener(
-"click",
-async () => {
-
-  const email =
-  emailInput.value.trim();
-
-  const password =
-  passwordInput.value.trim();
+signupBtn.addEventListener("click", async () => {
+  const email = emailInput.value.trim();
+  const password = passwordInput.value.trim();
 
   if(!email || !password){
-    alert("이메일과 비밀번호 입력");
+    alert("이메일과 비밀번호를 입력해주세요.");
     return;
   }
-
   try{
-
-    await createUserWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
-
-    alert("회원가입 성공");
-
+    await createUserWithEmailAndPassword(auth, email, password);
+    alert("회원가입 성공!");
   }catch(error){
-
-    alert(error.message);
-
+    alert("회원가입 실패: " + error.message);
   }
-
 });
 
 /* =========================
    로그인
 ========================= */
+loginBtn.addEventListener("click", async () => {
+  const email = emailInput.value.trim();
+  const password = passwordInput.value.trim();
 
-loginBtn.addEventListener(
-"click",
-async () => {
-
-  const email =
-  emailInput.value.trim();
-
-  const password =
-  passwordInput.value.trim();
-
-  try{
-
-    await signInWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
-
-  }catch(error){
-
-    alert(error.message);
-
+  if(!email || !password){
+    alert("이메일과 비밀번호를 입력해주세요.");
+    return;
   }
-
+  try{
+    await signInWithEmailAndPassword(auth, email, password);
+  }catch(error){
+    alert("로그인 실패: " + error.message);
+  }
 });
 
 /* =========================
    로그아웃
 ========================= */
-
-logoutBtn.addEventListener(
-"click",
-async () => {
-
-  await signOut(auth);
-
-});
-
-/* =========================
-   로그인 상태 확인
-========================= */
-
-onAuthStateChanged(
-auth,
-(user)=>{
-
-  if(user){
-
-    currentUser = user;
-
-    authSection.classList.add(
-      "hidden"
-    );
-
-    mainSection.classList.remove(
-      "hidden"
-    );
-
-    userEmail.textContent =
-    user.email;
-
-  }else{
-
-    currentUser = null;
-
-    authSection.classList.remove(
-      "hidden"
-    );
-
-    mainSection.classList.add(
-      "hidden"
-    );
-
+logoutBtn.addEventListener("click", async () => {
+  try {
+    await signOut(auth);
+  } catch(error) {
+    alert("로그아웃 실패: " + error.message);
   }
-
 });
+
 /* =========================
-   프로필 저장
+   인증 상태 변경 감지
 ========================= */
+onAuthStateChanged(auth, async (user) => {
+  if(user){
+    currentUser = user;
+    authSection.classList.add("hidden");
+    mainSection.classList.remove("hidden");
+    userEmail.textContent = user.email;
 
-saveProfileBtn.addEventListener(
-"click",
-async()=>{
+    // 로그인 시 유저 데이터 및 기록 실시간 로드
+    loadProfile(user.uid);
+    loadChats(user.uid);
+  }else{
+    currentUser = null;
+    authSection.classList.remove("hidden");
+    mainSection.classList.add("hidden");
+    userEmail.textContent = "";
+    dreamInput.value = "";
+    worryInput.value = "";
+    answerBox.textContent = "아직 답변이 없습니다.";
+    audioPlayer.src = "";
+  }
+});
 
+/* =========================
+   프로필 저장 및 불러오기
+========================= */
+saveProfileBtn.addEventListener("click", async () => {
   if(!currentUser){
-    alert("로그인 필요");
+    alert("로그인이 필요합니다.");
     return;
   }
-
   try{
-
-    await set(
-      ref(db,`profiles/${currentUser.uid}`),
-      {
-        dream:dreamInput.value,
-        worry:worryInput.value
-      }
-    );
-
-    alert("프로필 저장 완료");
-
+    await set(ref(db, `profiles/${currentUser.uid}`), {
+      dream: dreamInput.value.trim(),
+      worry: worryInput.value.trim()
+    });
+    alert("프로필이 저장되었습니다.");
   }catch(error){
-
-    alert("저장 실패");
-
+    alert("저장 실패: " + error.message);
   }
+});
 
+async function loadProfile(uid) {
+  try {
+    const snapshot = await get(ref(db, `profiles/${uid}`));
+    if(snapshot.exists()) {
+      const data = snapshot.val();
+      dreamInput.value = data.dream || "";
+      worryInput.value = data.worry || "";
+    }
+  } catch(error) {
+    console.error("프로필 로드 실패:", error);
+  }
 }
-);
 
 /* =========================
-   GPT 질문
+   GPT 질문하기
 ========================= */
-
-askBtn.addEventListener(
-"click",
-askFutureMe
-);
+askBtn.addEventListener("click", askFutureMe);
 
 async function askFutureMe(){
-
   if(!currentUser){
-    alert("로그인 필요");
+    alert("로그인이 필요합니다.");
     return;
   }
 
-  const question =
-  questionInput.value.trim();
-
+  const question = questionInput.value.trim();
   if(!question){
-    alert("질문 입력");
+    alert("질문을 입력해주세요.");
     return;
   }
 
   try{
+    statusBox.textContent = "미래의 내가 답변 작성 중...";
+    askBtn.disabled = true;
 
-    statusBox.textContent =
-    "미래의 내가 답변 작성 중...";
+    const prompt = `너는 사용자의 10년 후 미래 모습이다.
+현재 꿈: ${dreamInput.value.trim() || "없음"}
+현재 고민: ${worryInput.value.trim() || "없음"}
+질문: ${question}
 
-    const prompt = `
-너는 사용자의 10년 후 미래 모습이다.
+10년 후의 내가 친근하게 조언해줘.`;
 
-현재 꿈:
-${dreamInput.value}
+    // 단일 URL 처리를 위해 type: "gpt" 명시
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "text/plain" 
+      },
+      body: JSON.stringify({ 
+        type: "gpt",
+        question: prompt 
+      })
+    });
 
-현재 고민:
-${worryInput.value}
+    const data = await response.json();
+    const answer = data.answer || "답변을 가져오지 못했습니다.";
 
-질문:
-${question}
-
-10년 후의 내가
-친근하게 조언해줘.
-`;
-
-    const response =
-    await fetch(
-      GPT_URL,
-      {
-        method:"POST",
-        body:JSON.stringify({
-          question:prompt
-        })
-      }
-    );
-
-    const data =
-    await response.json();
-
-    const answer =
-    data.answer || "답변 없음";
-
-    answerBox.textContent =
-    answer;
-
-    statusBox.textContent =
-    "답변 생성 완료";
-
-    saveChat(question,answer);
-
+    answerBox.textContent = answer;
+    statusBox.textContent = "답변 생성 완료";
+    
+    questionInput.value = ""; 
+    saveChat(question, answer);
   }catch(error){
-
     console.error(error);
+    statusBox.textContent = "오류 발생. 다시 시도해주세요.";
+  }finally{
+    askBtn.disabled = false;
+  }
+}
 
-    statusBox.textContent =
-    "오류 발생";
-
+/* =========================
+   TTS (음성 듣기) 기능
+========================= */
+ttsBtn.addEventListener("click", async () => {
+  const textToSpeak = answerBox.textContent;
+  if(!textToSpeak || textToSpeak === "아직 답변이 없습니다." || textToSpeak === "답변을 가져오지 못했습니다.") {
+    alert("들을 수 있는 답변이 없습니다.");
+    return;
   }
 
-}
+  try {
+    statusBox.textContent = "음성 생성 중...";
+    ttsBtn.disabled = true;
+
+    // 단일 URL 처리를 위해 type: "tts" 명시
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "text/plain"
+      },
+      body: JSON.stringify({ 
+        type: "tts",
+        text: textToSpeak 
+      })
+    });
+
+    const data = await response.json();
+    
+    // 오디오 반환 형식 자동 대응 (audioUrl 혹은 answer 필드 검증)
+    const audioSrc = data.audioUrl || data.answer || data.url;
+
+    if(audioSrc) {
+      audioPlayer.src = audioSrc;
+      audioPlayer.play();
+      statusBox.textContent = "음성 재생 중";
+    } else {
+      alert("오디오 변환 데이터 형식이 맞지 않거나 가져오지 못했습니다.");
+      statusBox.textContent = "음성 실패";
+    }
+  } catch(error) {
+    console.error("TTS 에러:", error);
+    alert("음성 변환에 실패했습니다.");
+    statusBox.textContent = "오류 발생";
+  } finally {
+    ttsBtn.disabled = false;
+  }
+});
 
 /* =========================
-   대화 저장
+   대화 기록 저장 및 불러오기
 ========================= */
-
-async function saveChat(
-question,
-answer
-){
-
-  const chatRef =
-  push(
-    ref(
-      db,
-      `chats/${currentUser.uid}`
-    )
-  );
-
-  await set(chatRef,{
-    question,
-    answer,
-    createdAt:
-    new Date().toLocaleString()
-  });
-
+async function saveChat(question, answer){
+  try {
+    const chatRef = push(ref(db, `chats/${currentUser.uid}`));
+    await set(chatRef, {
+      question,
+      answer,
+      createdAt: new Date().toLocaleString()
+    });
+  } catch(error) {
+    console.error("채팅 저장 실패:", error);
+  }
 }
-
-/* =========================
-   대화 불러오기
-========================= */
 
 function loadChats(uid){
-
-  const chatRef =
-  ref(db,`chats/${uid}`);
-
-  onValue(chatRef,(snapshot)=>{
-
-    const data =
-    snapshot.val();
-
+  const chatRef = ref(db, `chats/${uid}`);
+  onValue(chatRef, (snapshot) => {
+    const data = snapshot.val();
     if(!data){
-
-      chatHistory.innerHTML =
-      "기록이 없습니다.";
-
+      chatHistory.innerHTML = "기록이 없습니다.";
       return;
     }
 
     let html = "";
-
     Object.values(data)
-    .reverse()
-    .forEach(chat=>{
-
-      html += `
-      <div class="chat-item">
-        <strong>질문</strong><br>
-        ${chat.question}
-        <hr>
-        <strong>답변</strong><br>
-        ${chat.answer}
-      </div>
-      `;
-
-    });
-
-    chatHistory.innerHTML =
-    html;
-
+      .reverse()
+      .forEach(chat => {
+        html += `
+        <div class="chat-item">
+          <strong>질문 (${chat.createdAt || ''})</strong><br>
+          ${chat.question}
+          <hr>
+          <strong>답변</strong><br>
+          ${chat.answer}
+        </div>
+        `;
+      });
+    chatHistory.innerHTML = html;
   });
-
 }
-
-/* =========================
-   로그인 시 기록 불러오기
-========================= */
-
-onAuthStateChanged(
-auth,
-(user)=>{
-
-  if(user){
-
-    loadChats(user.uid);
-
-  }
-
-});
 </script>
 </body>
 </html>
